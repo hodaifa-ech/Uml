@@ -57,7 +57,8 @@ if (isset($_SESSION['user_id'])) {
             $sqlUpdate->execute([$id_client, $id_produit]);
             echo "La quantité du produit a été mise à jour dans le panier.";
         } else {
-            $sqlInsertProduct = $conn->prepare('INSERT INTO contient (id_panier, id_produit, quantite) VALUES ((SELECT id_panier FROM panier WHERE id_client = ?), ?, 1)');
+            $sqlInsertProduct = $conn->prepare('INSERT INTO contient (id_panier, id_produit, quantite) VALUES ((SELECT id_panier FROM panier WHERE id_client = ? LIMIT 1), ?, 1)');
+
             $sqlInsertProduct->execute([$id_client, $id_produit]);
             echo "Le produit a été ajouté au panier.";
         }
@@ -66,6 +67,34 @@ if (isset($_SESSION['user_id'])) {
 
         $_SESSION['product_id_alert_displayed'] = true;
         echo "<script>alert('ID du produit non spécifié.');</script>";
+    }
+
+
+    if (isset($_POST['commander_button'])) {
+        $sql = $conn->prepare('SELECT id_panier FROM panier WHERE id_client = ?');
+        $sql->execute([$id_client]);
+        $exist = $sql->fetch(PDO::FETCH_ASSOC);
+        $id_panier = $exist['id_panier'];
+
+        // Insérer les produits du panier dans la table de commande
+        foreach ($products_in_cart as $product) {
+            $id_produit = $product['id_produit'];
+            $quantite = $product['quantite'];
+            $prix = $product['Pprice'];
+            $nom_produit = $product['pnom'];
+
+            // Insérer les données du produit dans la table de commande
+            $sqlInsertCommande = $conn->prepare('INSERT INTO commande (Pnom, Pquantite, Pprice, id_client, id_panier) VALUES (?, ?, ?, ?, ?)');
+            $sqlInsertCommande->execute([$nom_produit, $quantite, $prix, $id_client, $id_panier]);
+        }
+
+        // Supprimer les produits du panier de la table contient
+        $sqlDeleteProducts = $conn->prepare('DELETE FROM contient WHERE id_panier = ?');
+        $sqlDeleteProducts->execute([$id_panier]);
+
+        // Rediriger l'utilisateur vers une page de confirmation ou de téléchargement du reçu
+        header('Location: p_commande.php');
+        exit();
     }
 } else {
     // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
@@ -235,7 +264,9 @@ if (isset($_SESSION['user_id'])) {
         </div>
         <div class="row mt-4">
             <div class="col-md-12">
-                <a href="p_commande.php" class="btn btn-primary">Commander</a>
+                <form method="post">
+                    <button type="submit" name="commander_button" class="btn btn-primary">Commander</button>
+                </form>
             </div>
         </div>
     </div>

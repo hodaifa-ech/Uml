@@ -27,45 +27,46 @@ function countProductsInCart($userId, $conn)
 
 if (isset($_SESSION['user_id'])) {
     $id_client = $_SESSION['user_id'];
-    if (isset($_POST['ajouter'])) {
-    }
-    $stmt = $conn->prepare('SELECT p.id_produit, p.pnom, p.Pprice, p.image, c.quantite
-    FROM produit p
-    INNER JOIN contient c ON p.id_produit = c.id_produit
-    INNER JOIN panier pa ON c.id_panier = pa.id_panier
-    WHERE pa.id_client = ?');
+
+
+
+
+    // Récupérer les produits dans le panier de l'utilisateur
+    $stmt = $conn->prepare('SELECT * FROM commande WHERE id_client = ?');
     $stmt->execute([$id_client]);
-    $products_in_cart = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (isset($_POST['payer_button'])) {
 
-    $sqlCheckClient = $conn->prepare('SELECT id_client FROM panier WHERE id_client = ?');
-    $sqlCheckClient->execute([$id_client]);
-    $existingClient = $sqlCheckClient->fetch(PDO::FETCH_ASSOC);
-    if (!$existingClient) {
-        $sqlInsertClient = $conn->prepare('INSERT INTO panier (id_client) VALUES (?)');
-        $sqlInsertClient->execute([$id_client]);
-    }
 
-    if (isset($_GET['id_produit'])) {
-        $id_produit = $_GET['id_produit'];
+        $conn->beginTransaction();
 
-        $sqlCheckProduct = $conn->prepare('SELECT * FROM contient WHERE id_panier IN (SELECT id_panier FROM panier WHERE id_client = ?) AND id_produit = ?');
-        $sqlCheckProduct->execute([$id_client, $id_produit]);
-        $existingProduct = $sqlCheckProduct->fetch(PDO::FETCH_ASSOC);
+        // Récupérer l'ID du panier de l'utilisateur
+        $sqlGetPanierId = $conn->prepare('SELECT id_panier FROM panier WHERE id_client = ?');
+        $sqlGetPanierId->execute([$id_client]);
+        $id_panier = $sqlGetPanierId->fetchColumn();
 
-        if ($existingProduct) {
-            $sqlUpdate = $conn->prepare('UPDATE contient SET quantite = quantite + 1 WHERE id_panier IN (SELECT id_panier FROM panier WHERE id_client = ?) AND id_produit = ?');
-            $sqlUpdate->execute([$id_client, $id_produit]);
-            echo "La quantité du produit a été mise à jour dans le panier.";
-        } else {
-            $sqlInsertProduct = $conn->prepare('INSERT INTO contient (id_panier, id_produit, quantite) VALUES ((SELECT id_panier FROM panier WHERE id_client = ?), ?, 1)');
-            $sqlInsertProduct->execute([$id_client, $id_produit]);
-            echo "Le produit a été ajouté au panier.";
+        // Insérer un enregistrement dans la table paiement
+        $sqlInsertPaiement = $conn->prepare('INSERT INTO paiement (id_client, id_commande) VALUES (?,?)');
+        foreach ($commandes as $commande) {
+            $sqlInsertPaiement->execute([$id_client, $commande['id_commande']]);
         }
-        header('Location: panier.php');
-    } elseif (!isset($_SESSION['product_id_alert_displayed'])) {
 
-        $_SESSION['product_id_alert_displayed'] = true;
-        echo "<script>alert('ID du produit non spécifié.');</script>";
+        // Insérer un enregistrement dans la table recut
+        $sqlInsertRecut = $conn->prepare('INSERT INTO recut (id_client, id_commande) VALUES (?, ?)');
+        foreach ($commandes as $commande) {
+            $sqlInsertRecut->execute([$id_client, $commande['id_commande']]);
+        }
+
+
+
+        // Insérer un enregistrement dans la table recut
+
+
+        // Valider la transaction
+        $conn->commit();
+
+        // Redirection vers une page de confirmation ou une autre page appropriée
+
     }
 } else {
     // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
@@ -187,14 +188,14 @@ if (isset($_SESSION['user_id'])) {
                     <tbody>
                         <?php
                         $totalPrice = 0;
-                        foreach ($products_in_cart as $index => $product) :
-                            $totalPrice += $product['Pprice'] * $product['quantite'];
+                        foreach ($commandes as $index => $product) :
+                            $totalPrice += $product['Pprice'] * $product['Pquantite'];
                         ?>
                             <tr>
                                 <th scope="row"><?php echo $index + 1; ?></th>
-                                <td><?php echo $product['pnom']; ?></td>
+                                <td><?php echo $product['Pnom']; ?></td>
                                 <td><?php echo $product['Pprice']; ?> DH</td>
-                                <td><?php echo $product['quantite']; ?></td>
+                                <td><?php echo $product['Pquantite']; ?></td>
                             </tr>
                         <?php endforeach; ?>
                         <tr>
@@ -232,7 +233,7 @@ if (isset($_SESSION['user_id'])) {
         <?php if ($purchase_successful) : ?>
             <p>Merci pour votre achat !</p>
             <p>Veuillez récupérer votre reçu: <a href="pdf.php" target="_blank">Télécharger</a> </p>
-            
+
         <?php endif; ?>
 
         <!-- Display the button with the appropriate text -->

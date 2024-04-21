@@ -29,17 +29,9 @@ if (isset($_SESSION['user_id'])) {
     $id_client = $_SESSION['user_id'];
     if (isset($_POST['ajouter'])) {
     }
-    $stmt = $conn->prepare('SELECT p.id_produit, p.pnom, p.Pprice, p.image, c.quantite
-    FROM produit p
-    INNER JOIN contient c ON p.id_produit = c.id_produit
-    INNER JOIN panier pa ON c.id_panier = pa.id_panier
-    WHERE pa.id_client = ?');
+    $stmt = $conn->prepare('SELECT * FROM commande WHERE id_client = ?');
     $stmt->execute([$id_client]);
-    $products_in_cart = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $sqlCheckClient = $conn->prepare('SELECT id_client FROM panier WHERE id_client = ?');
-    $sqlCheckClient->execute([$id_client]);
-    $existingClient = $sqlCheckClient->fetch(PDO::FETCH_ASSOC);
+    $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if (!$existingClient) {
         $sqlInsertClient = $conn->prepare('INSERT INTO panier (id_client) VALUES (?)');
         $sqlInsertClient->execute([$id_client]);
@@ -103,13 +95,13 @@ if (isset($_SESSION['user_id'])) {
                     <tbody>
                         <?php
                         $totalPrice = 0;
-                        foreach ($products_in_cart as $index => $product) :
-                            $totalPrice += $product['Pprice'] * $product['quantite'];
+                        foreach ($commandes as $index => $product) :
+                            $totalPrice += $product['Pprice'] * $product['Pquantite'];
                         ?>
                             <tr>
                                 <th scope="row"><?php echo $index + 1; ?></th>
-                                <td><?php echo $product['pnom']; ?></td>
-                                <td><?php echo $product['quantite']; ?></td>
+                                <td><?php echo $product['Pnom']; ?></td>
+                                <td><?php echo $product['Pquantite']; ?></td>
                                 <td><?php echo $product['Pprice']; ?> DH</td>
                             </tr>
                         <?php endforeach; ?>
