@@ -26,9 +26,18 @@ function countProductsInCart($userId, $conn)
 }
 
 // Get products
-$requet = $conn->prepare('SELECT * FROM produit');
-$requet->execute();
-$produits = $requet->fetchAll(PDO::FETCH_OBJ);
+if (isset($_GET['search'])) {
+    $searchTerm = $_GET['search'];
+    $requete = $conn->prepare('SELECT * FROM produit WHERE pnom LIKE :searchTerm');
+    $requete->bindValue(':searchTerm', '%' . $searchTerm . '%');
+    $requete->execute();
+    $produits = $requete->fetchAll(PDO::FETCH_OBJ);
+} else {
+    // Get all products
+    $requete = $conn->prepare('SELECT * FROM produit');
+    $requete->execute();
+    $produits = $requete->fetchAll(PDO::FETCH_OBJ);
+}
 
 // Get categories
 $requet = $conn->prepare('SELECT * FROM category');
@@ -64,6 +73,23 @@ $categorys = $requet->fetchAll(PDO::FETCH_OBJ);
         }
     </script>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .announcement {
+            background-color: rgb(67, 38, 75);
+            white-space: nowrap;
+            /* Prevent the text from wrapping */
+            overflow: hidden;
+            /* Hide overflowed content */
+            position: absolute;
+            top: 10%;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .e {
+            color: rgb(255, 0, 0);
+        }
+    </style>
 </head>
 
 <body>
@@ -144,14 +170,19 @@ $categorys = $requet->fetchAll(PDO::FETCH_OBJ);
                         </a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <form class="d-flex" action="home.php" method="GET">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
             </div>
         </div>
     </nav>
     <!-- navbar -->
+    <div class="announcement">
+        <a target="_blank" class="e" href="news.php">
+            <marquee bgcolor="white" direction="right" scrollamount="7">--------ANNONCE------</marquee>
+        </a>
+    </div>
     <div class="container mt-5">
 
 
