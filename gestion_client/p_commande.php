@@ -84,23 +84,6 @@ if (isset($_SESSION['user_id'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function deleteItem(id) {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById(id).submit();
-                }
-            });
-        }
-    </script>
     <style>
         .card {
             margin-bottom: 20px;
@@ -157,12 +140,6 @@ if (isset($_SESSION['user_id'])) {
                             }
                             ?>
 
-
-
-
-
-
-
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -195,17 +172,16 @@ if (isset($_SESSION['user_id'])) {
     </nav>
     <!-- navbar -->
     <div class="container">
-        <h1 class="my-5">Votre Panier</h1>
+        <h1 class="my-5">Votre Commande</h1>
         <div class="row">
             <div class="col-md-12">
-                <table class="table">
+                <table class="table" id="your_table_id">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Nom du Produit</th>
                             <th scope="col">Prix</th>
                             <th scope="col">Quantité</th>
-                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -219,10 +195,6 @@ if (isset($_SESSION['user_id'])) {
                                 <td><?php echo $product['pnom']; ?></td>
                                 <td><?php echo $product['Pprice']; ?> DH</td>
                                 <td><?php echo $product['quantite']; ?></td>
-                                <td>
-                                    <a type="button" class="btn btn-sm btn-outline-primary" name="ajouter" href="ajouter.php?id_produit=<?php echo $product['id_produit']; ?>">Ajouter Quantité</a>
-                                    <a type="button" class="btn btn-sm btn-outline-danger" name="supprimer" href="supprimer.php?id_produit=<?php echo $product['id_produit']; ?>">supprimer</a>
-                                </td>
                             </tr>
                         <?php endforeach; ?>
                         <tr>
@@ -233,9 +205,42 @@ if (isset($_SESSION['user_id'])) {
                 </table>
             </div>
         </div>
+
+        <!-- form table -->
+        <!-- <form id="download_form" method="post" action="generate_pdf.php" style="display: none;">
+            <input type="hidden" name="tableHtml" id="table_html_input">
+        </form> -->
+
+
+        <?php
+        // Check if the button "Payer" is clicked (You need to implement this logic based on your application flow)
+        $purchase_successful = false;
+        if (isset($_POST['payer_button'])) {
+            // Set a flag to indicate that the purchase is successful
+            $purchase_successful = true;
+        }
+
+        // Define the button text based on the purchase status
+        if ($purchase_successful) {
+            $button_text = "Télécharger reçu"; // Change button text to "Télécharger reçu"
+        } else {
+            $button_text = "Payer"; // Default button text
+        }
+        ?>
+
+        <!-- Display a thank you message and receipt download link if purchase is successful -->
+        <?php if ($purchase_successful) : ?>
+            <p>Merci pour votre achat !</p>
+            <p>Veuillez récupérer votre reçu: <a href="pdf.php" target="_blank">Télécharger</a> </p>
+            
+        <?php endif; ?>
+
+        <!-- Display the button with the appropriate text -->
         <div class="row mt-4">
             <div class="col-md-12">
-                <a href="p_commande.php" class="btn btn-primary">Commander</a>
+                <form method="post">
+                    <button type="submit" name="payer_button" id="telecharger_button" <?php if ($purchase_successful) echo 'hidden'; ?>><?php echo $button_text; ?></button>
+                </form>
             </div>
         </div>
     </div>

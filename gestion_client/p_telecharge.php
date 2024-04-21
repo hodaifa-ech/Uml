@@ -84,128 +84,20 @@ if (isset($_SESSION['user_id'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function deleteItem(id) {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById(id).submit();
-                }
-            });
-        }
-    </script>
-    <style>
-        .card {
-            margin-bottom: 20px;
-        }
-    </style>
 </head>
 
 <body>
-    <!-- navbar -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Supermarche</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="home.php">Home</a>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Account
-                        </a>
-                        <ul class="dropdown-menu">
-                            <?php
-
-                            if (empty($_SESSION)) {
-
-
-                            ?>
-
-                                <li>
-                                    <a class="dropdown-item" href="registre.php">sign in</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="login.php">login
-                                    </a>
-                                </li>
-
-                            <?php
-                            } else {
-                            ?>
-
-
-                                <li>
-                                    <a class="dropdown-item" href="profil/profil.php"> <?php echo $_SESSION['nom'] . " " . $_SESSION['prenom'] ?></a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="logout.php">log out </a>
-                                </li>
-                            <?php
-                            }
-                            ?>
-
-
-
-
-
-
-
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav  mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active mx-5" aria-current="page" href="panier.php">
-                            <button type="button" class="btn btn-dark position-relative">
-                                <i class="fa-solid fa-cart-shopping"></i>
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    <?php
-                                    include 'connexionDB.php';
-                                    if (!empty($_SESSION))
-                                        echo countProductsInCart($_SESSION['user_id'], $conn);
-                                    ?>
-                                    <span class="visually-hidden">Product</span>
-                                </span>
-                            </button>
-                        </a>
-                    </li>
-                </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-            </div>
-        </div>
-    </nav>
-    <!-- navbar -->
     <div class="container">
-        <h1 class="my-5">Votre Panier</h1>
+        <h1 class="my-5">Votre Commande</h1>
         <div class="row">
             <div class="col-md-12">
-                <table class="table">
+                <table class="table" id="your_table_id">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Nom du Produit</th>
-                            <th scope="col">Prix</th>
                             <th scope="col">Quantité</th>
-                            <th scope="col">Actions</th>
+                            <th scope="col">Prix</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -217,12 +109,8 @@ if (isset($_SESSION['user_id'])) {
                             <tr>
                                 <th scope="row"><?php echo $index + 1; ?></th>
                                 <td><?php echo $product['pnom']; ?></td>
-                                <td><?php echo $product['Pprice']; ?> DH</td>
                                 <td><?php echo $product['quantite']; ?></td>
-                                <td>
-                                    <a type="button" class="btn btn-sm btn-outline-primary" name="ajouter" href="ajouter.php?id_produit=<?php echo $product['id_produit']; ?>">Ajouter Quantité</a>
-                                    <a type="button" class="btn btn-sm btn-outline-danger" name="supprimer" href="supprimer.php?id_produit=<?php echo $product['id_produit']; ?>">supprimer</a>
-                                </td>
+                                <td><?php echo $product['Pprice']; ?> DH</td>
                             </tr>
                         <?php endforeach; ?>
                         <tr>
@@ -233,9 +121,12 @@ if (isset($_SESSION['user_id'])) {
                 </table>
             </div>
         </div>
+
         <div class="row mt-4">
             <div class="col-md-12">
-                <a href="p_commande.php" class="btn btn-primary">Commander</a>
+                <form method="post">
+                    <button type="submit" name="payer_button" id="telecharger_button">Télécharger reçu</button>
+                </form>
             </div>
         </div>
     </div>
