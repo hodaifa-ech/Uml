@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "uml";
+$database = "supermarche";
 
 // Vérifier si le formulaire a été soumis
 if (isset($_POST['submit'])) {

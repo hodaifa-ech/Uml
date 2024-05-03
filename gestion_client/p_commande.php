@@ -32,7 +32,7 @@ if (isset($_SESSION['user_id'])) {
 
 
     // Récupérer les produits dans le panier de l'utilisateur
-    $stmt = $conn->prepare('SELECT * FROM commande WHERE id_client = ?');
+    $stmt = $conn->prepare('SELECT * FROM commandef WHERE id_client = ?');
     $stmt->execute([$id_client]);
     $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if (isset($_POST['payer_button'])) {

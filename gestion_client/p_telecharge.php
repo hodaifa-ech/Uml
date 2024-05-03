@@ -29,7 +29,7 @@ if (isset($_SESSION['user_id'])) {
     $id_client = $_SESSION['user_id'];
     if (isset($_POST['ajouter'])) {
     }
-    $stmt = $conn->prepare('SELECT * FROM commande WHERE id_client = ?');
+    $stmt = $conn->prepare('SELECT * FROM commandef WHERE id_client = ?');
     $stmt->execute([$id_client]);
     $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if (!$existingClient) {

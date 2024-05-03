@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "uml";
+$database = "supermarche";
 
 
 

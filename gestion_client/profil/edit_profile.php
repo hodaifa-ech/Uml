@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $database = "uml";
+    $database = "supermarche";
 
 
     // Retrieve form data

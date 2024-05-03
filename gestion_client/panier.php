@@ -84,7 +84,7 @@ if (isset($_SESSION['user_id'])) {
             $nom_produit = $product['pnom'];
 
             // Insérer les données du produit dans la table de commande
-            $sqlInsertCommande = $conn->prepare('INSERT INTO commande (Pnom, Pquantite, Pprice, id_client, id_panier) VALUES (?, ?, ?, ?, ?)');
+            $sqlInsertCommande = $conn->prepare('INSERT INTO commandef (Pnom, Pquantite, Pprice, id_client, id_panier) VALUES (?, ?, ?, ?, ?)');
             $sqlInsertCommande->execute([$nom_produit, $quantite, $prix, $id_client, $id_panier]);
         }
 

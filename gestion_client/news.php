@@ -17,7 +17,7 @@
             $servername = "localhost";
             $username = "root";
             $password = "";
-            $dbname = "uml";
+            $dbname = "supermarche";
 
             try {
                 $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);

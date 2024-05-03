@@ -158,7 +158,7 @@ $produit = $sqlState->fetch(PDO::FETCH_ASSOC);
                 <div class="col-md-8">
                     <div class="card">
                         <?php if ($produit['image']) : ?>
-                            <img src="image/<?php echo $produit['image'] ?>" alt="product_image" class="card-img-top img-fluid" style="height: 100%;">
+                            <img src="../AdminStockEmployee/Administration/images/<?php echo $produit['image'] ?>" alt="product_image" class="card-img-top img-fluid" style="height: 100%;">
                         <?php else : ?>
                             <img src="image/4k-Akatsuki-Wallpaper.jpg" alt="" class="card-img-top img-fluid" style="height: 400px;">
                         <?php endif; ?>

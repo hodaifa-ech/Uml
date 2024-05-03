@@ -5,7 +5,7 @@ session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "uml";
+$database = "supermarche";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get email and password from the form

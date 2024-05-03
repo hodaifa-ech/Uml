@@ -83,7 +83,7 @@ $categorys = $requet->fetchAll(PDO::FETCH_OBJ);
             position: absolute;
             top: 10%;
             width: 100%;
-            z-index: 1000;
+            z-index: 1;
         }
 
         .e {
@@ -94,7 +94,7 @@ $categorys = $requet->fetchAll(PDO::FETCH_OBJ);
 
 <body>
     <!-- navbar -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary ">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Supermarche</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,7 +110,7 @@ $categorys = $requet->fetchAll(PDO::FETCH_OBJ);
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Account
                         </a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu " style="z-index: 10;">
                             <?php
 
                             if (empty($_SESSION)) {
@@ -203,7 +203,7 @@ $categorys = $requet->fetchAll(PDO::FETCH_OBJ);
                     <div class="col-md-4 mb-4">
                         <div class="card">
                             <?php if ($produit->image) : ?>
-                                <img src="image/<?php echo $produit->image ?>" alt="product_image" class="card-img-top">
+                                <img src="../AdminStockEmployee/Administration/images/<?php echo $produit->image ?>" alt="product_image" class="card-img-top">
                             <?php else : ?>
                                 <img src="image/4k-Akatsuki-Wallpaper.jpg" alt="" class="card-img-top">
                             <?php endif; ?>

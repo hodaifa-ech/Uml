@@ -28,7 +28,7 @@ function countProductsInCart($userId, $conn)
 if (isset($_SESSION['user_id'])) {
     $id_client = $_SESSION['user_id'];
 
-    $stmt = $conn->prepare('SELECT * FROM commande WHERE id_client = ?');
+    $stmt = $conn->prepare('SELECT * FROM commandef WHERE id_client = ?');
     $stmt->execute([$id_client]);
     $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -91,9 +91,7 @@ if (isset($_SESSION['user_id'])) {
 <body>
     <div class="container d-flex justify-content-center mt-50 mb-50">
         <div class="row">
-            <div class="col-md-12 text-right mb-3">
-                <button class="btn btn-primary" id="download"> download pdf</button>
-            </div>
+
             <div class="col-md-12">
                 <div class="card" id="invoice">
                     <div class="card-header bg-transparent header-elements-inline">
