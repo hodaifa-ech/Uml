@@ -10,6 +10,17 @@ Ce projet vise à développer un système de gestion complet pour un supermarch�
 - **JavaScript**: Ajoutez des fonctionnalités interactives à l'interface utilisateur.
 - **Figma**: Outil de conception pour créer des maquettes et des prototypes.
 
+## Modélisation UML
+
+Ce projet a été développé en utilisant la modélisation UML pour représenter les différentes entités et leurs relations dans le système de gestion pour supermarché. La modélisation UML fournit une structure claire et un aperçu visuel des interactions entre les composants du système, ce qui a facilité le processus de conception et de développement.
+
+La modélisation UML a été utilisée pour définir les classes, les associations, les attributs et les méthodes nécessaires pour implémenter les fonctionnalités du système, telles que la gestion des stocks, des clients, du personnel et de l'administration. Cela a permis à l'équipe de développement de comprendre rapidement les exigences du projet et de concevoir une architecture logicielle robuste et efficace.
+
+Le diagramme UML complet est disponible dans le dossier du projet, sous le nom de fichier "uml_diagram.png", et il offre une vue d'ensemble détaillée de l'architecture du système.
+
+La modélisation UML a joué un rôle crucial dans la réalisation de ce projet, en fournissant une base solide pour le développement et en assurant la cohérence et la compréhension entre les membres de l'équipe tout au long du processus de développement.
+
+
 ## Fonctionnalités Principales
 
 ### Gestion de Stock
@@ -36,11 +47,7 @@ Ce projet vise à développer un système de gestion complet pour un supermarch�
 - Les administrateurs peuvent gérer les Responsables de Stock, les fournisseurs et les responsables du personnel.
 - Les super administrateurs peuvent gérer les administrateurs, ainsi que les fournisseurs et les responsables du personnel.
 
-## Modélisation UML
 
-Vous trouverez ci-dessous le diagramme UML représentant les différentes entités et leurs relations dans le système de gestion pour supermarché.
-
-![Diagramme UML](uml_diagram.png)
 
 ## Installation
 
@@ -59,4 +66,3 @@ Les contributions à ce projet sont les bienvenues. Si vous souhaitez proposer d
 
 ---
 
-© 2024 Supermarché Gestion Projet. Tous droits réservés.
