@@ -16,7 +16,7 @@ Ce projet a été développé en utilisant la modélisation UML pour représente
 
 La modélisation UML a été utilisée pour définir les classes, les associations, les attributs et les méthodes nécessaires pour implémenter les fonctionnalités du système, telles que la gestion des stocks, des clients, du personnel et de l'administration. Cela a permis à l'équipe de développement de comprendre rapidement les exigences du projet et de concevoir une architecture logicielle robuste et efficace.
 
-Le diagramme UML complet est disponible dans le dossier du projet, sous le nom de fichier "uml_diagram.png", et il offre une vue d'ensemble détaillée de l'architecture du système.
+Le diagramme UML complet est disponible dans le dossier du projet, sous le nom de fichier "supermarche.pdf, et il offre une vue d'ensemble détaillée de l'architecture du système.
 
 La modélisation UML a joué un rôle crucial dans la réalisation de ce projet, en fournissant une base solide pour le développement et en assurant la cohérence et la compréhension entre les membres de l'équipe tout au long du processus de développement.
 
